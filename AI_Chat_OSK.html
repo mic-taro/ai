@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Chat</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 780px;
+  }
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    box-sizing: border-box;
+  }
+  .input-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+  #question-label {
+    margin-right: 10px;
+  }
+  #question-input {
+    width: 75%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 20px 0 0 80px;
+    height: 200px;
+    text-align: left;
+    resize: none;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    vertical-align: top;
+  }
+  #submit-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFFF00;
+    cursor: pointer;
+    margin-left: 400px;
+    margin-top: 20px;
+    color: #000000;
+  }
+  #result-label {
+    margin-right: 10px;
+  }
+  #result {
+    width: 75%;
+    height: calc(100% - 240px);
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    margin: 20px 0 0 80px;
+    height: 300px;
+  }
+  .label {
+    font-weight: bold;
+    margin-left: 20px;
+    color:red;
+  }
+  .section {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- 問い合わせ内容 -->
+  <div class="section">
+    <div class="input-container">
+      <label for="question-input" id="question-label" class="label">問い合わせ内容:</label>
+    </div>
+    <div>
+      <textarea id="question-input" placeholder="質問を入力してください"></textarea>
+    </div>
+    <div>
+      <button id="submit-btn">問い合わせ</button>
+    </div>
+  </div>
+  <!-- 回答 -->
+  <div>
+    <label for="result" id="result-label" class="label">回答:</label>
+  </div>
+  <div class="section">
+    <textarea id="result" readonly></textarea>
+  </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    // execLambda関数を実行するためのイベントリスナーを追加
+    document.getElementById("submit-btn").addEventListener("click", execLambda);
+
+    function execLambda() {
+        var question = document.getElementById("question-input").value.trim();
+        if (question !== '') {
+            var data = { "question": question };
+            var xhr = new XMLHttpRequest();
+            var url = 'https://vsqnhkftmju2nmw7wbzt3fcy7u0pchdm.lambda-url.ap-northeast-1.on.aws/';
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log('成功:', xhr.responseText);
+                        document.getElementById("result").value = xhr.responseText;
+                    } else {
+                        console.error('エラー:', xhr.statusText);
+                        document.getElementById("result").value = 'エラーが発生しました。';
+                    }
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        } else {
+            alert('質問を入力してください');
+        }
+    }
+</script>
+
+</body>
+</html>
