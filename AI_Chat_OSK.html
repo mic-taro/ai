@@ -104,14 +104,8 @@
 <script language="javascript" type="text/javascript">
     // execLambda関数を実行するためのイベントリスナーを追加
     document.getElementById("submit-btn").addEventListener("click", execLambda);
-
     function execLambda() {
         var question = document.getElementById("question-input").value.trim();
-      const headers = {
-  "Access-Control-Allow-Origin": "*", // 必要に応じて "*" を特定のオリジンに置き換えます
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS", // 必要に応じてメソッドを追加します
-  "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Amz-Date,X-Amz-Content-SHA256", // 必要に応じてヘッダーを追加します
-};
         if (question !== '') {
             var data = { "question": question };
             var xhr = new XMLHttpRequest();
